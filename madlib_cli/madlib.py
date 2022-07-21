@@ -1,9 +1,12 @@
-def read_template(self):
+import re
+
+
+def read_template():
     """
     This function opens and reads dark_and_stormy_night_template
     :return:
     """
-    with open('../assets/dark_and_stormy_night_template.txt', 'r') as f:
+    with open('assets/dark_and_stormy_night_template.txt', 'r') as f:
         contents = f.read()
         return contents.strip()
 
@@ -13,13 +16,41 @@ def parse_template():
     placeholder
     :return:
     """
+    with open('assets/dark_and_stormy_night_template.txt', 'r') as f:
+        contents = f.read()
+        empty_brackets = re.sub("{(.*?)}", "{}", contents)
+        words_removed = ()
+        words = re.findall(r"\{(.*?)}", contents)
+        for word in words:
+            words_removed = words_removed + (word, )
+        return empty_brackets, words_removed
 
 
 def merge():
     """
-    placeholder
+    actual = merge("It was a {} and {} {}.", ("dark", "stormy", "night"))
+    expected = "It was a dark and stormy night."
     :return:
     """
+    with open('assets/dark_and_stormy_night_template.txt', 'r') as f:
+        contents = f.read()
+        empty_brackets = re.sub("{(.*?)}", "{}", contents)
+        words_removed = ()
+        new_words = ()
+        words = re.findall(r"\{(.*?)}", contents)
+
+        for word in words:
+            words_removed = words_removed + (word, )
+
+        for word in words_removed:
+            thing = input(f"Enter a/an {word} --> ")
+            new_words = new_words + (thing, )
+
+        new_content = empty_brackets.format(*new_words)
+
+        with open('new_file.txt', 'w') as f:
+            f.write(new_content)
+        return new_content
 
 
 if __name__ == "__main__":
@@ -35,4 +66,8 @@ if __name__ == "__main__":
     """)
 
     temp = read_template()
-    print(temp)
+    # print(temp)
+    parse = parse_template()
+    # print(parse)
+    merge = merge()
+    print(merge)
